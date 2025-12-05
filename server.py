@@ -52,7 +52,11 @@ class ChickenHandler(http.server.SimpleHTTPRequestHandler):
         self.end_headers()
         self.wfile.write(response_text.encode('utf-8'))
 
-with socketserver.ThreadingTCPServer(("", PORT), ChickenHandler) as httpd:
+class ReusableThreadingTCPServer(socketserver.ThreadingTCPServer):
+    allow_reuse_address = True
+    daemon_threads = True
+
+with ReusableThreadingTCPServer(("", PORT), ChickenHandler) as httpd:
     print(f"Serving ASCII Chicken at port {PORT}")
     try:
         httpd.serve_forever()
