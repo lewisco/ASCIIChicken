@@ -52,7 +52,7 @@ class ChickenHandler(http.server.SimpleHTTPRequestHandler):
         self.end_headers()
         self.wfile.write(response_text.encode('utf-8'))
 
-with socketserver.TCPServer(("", PORT), ChickenHandler) as httpd:
+with socketserver.ThreadingTCPServer(("", PORT), ChickenHandler) as httpd:
     print(f"Serving ASCII Chicken at port {PORT}")
     try:
         httpd.serve_forever()
