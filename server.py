@@ -31,6 +31,11 @@ def is_private_ip(ip_str):
 
 class ChickenHandler(http.server.SimpleHTTPRequestHandler):
     def do_GET(self):
+        """
+        Handle GET requests by responding with the client's IP address followed by ASCII chicken art.
+        
+        Determines the IP to display by using the first IP from the `X-Forwarded-For` header when present; otherwise, if the connecting client IP is private or loopback, it fetches the public IP from the upstream service; if neither case applies, it uses the connecting client IP. Sends an HTTP 200 response with Content-Type `text/plain` and a response body containing the chosen IP, a newline, the chicken ASCII art, and a trailing newline.
+        """
         client_ip = self.client_address[0]
         
         # Check for X-Forwarded-For header (used by proxies/load balancers like Cloud Run)
